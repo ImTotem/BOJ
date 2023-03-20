@@ -1,0 +1,7 @@
+from sys import stdin
+input = stdin.readline
+
+a = sorted(int(input()) for _ in range(5))
+
+print(sum(a)//5)
+print(a[2])
