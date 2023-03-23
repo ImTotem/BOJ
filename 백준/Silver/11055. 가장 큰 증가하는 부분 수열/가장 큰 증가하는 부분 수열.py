@@ -1,0 +1,19 @@
+from bisect import bisect_left as search
+import sys
+
+input = lambda: sys.stdin.readline().strip()
+
+n = int(input())
+a = list(map(int, input().split()))
+
+dp = [1] * n
+dp[0] = a[0]
+
+for i in range(1, n):
+    for j in range(i):
+        if a[j] < a[i]:
+            dp[i] = max(dp[i], a[i], dp[j]+a[i])
+        else:
+            dp[i] = max(dp[i], a[i])
+
+print(max(dp))
