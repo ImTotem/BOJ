@@ -1,34 +1,28 @@
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda:sys.stdin.readline().strip()
 
-stack = []
-
-def push(x):
-    global stack
-    stack.append(x)
-
-def pop():
-    global stack
-    print(stack.pop()) if len(stack) > 0 else print(-1)
-
-def size():
-    global stack
-    print(len(stack))
-
-def empty():
-    global stack
-    print(1) if len(stack) == 0 else print(0)
-
-def top():
-    global stack
-    print(stack[-1]) if len(stack) > 0 else print(-1)
-
-n = int(input())
-
-for _ in range(n):
-    cmd = input().split()
+class Stack:
+    def __init__(self): self.list = []
+        
+    def push(self, num): self.list.append(num)
     
-    if cmd[0] != "push":
-        globals()[cmd[0]]()
-    else:
-        globals()[cmd[0]](cmd[1])
+    def pop(self):
+        if not self.list: return -1
+        return self.list.pop()
+        
+    def size(self): return len(self.list)
+        
+    def empty(self): return int(not len(self.list))
+        
+    def top(self): return self.list[-1] if self.list else -1
+
+stack = Stack()
+for _ in range(int(input())):
+    cmd = input().split()
+    op = cmd[0]
+ 
+    if op == "push": stack.push(cmd[1])
+    elif op == "pop": print(stack.pop())
+    elif op == "size": print(stack.size())
+    elif op == "empty": print(stack.empty())
+    else: print(stack.top())
