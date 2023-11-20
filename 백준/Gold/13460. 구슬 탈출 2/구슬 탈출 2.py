@@ -5,35 +5,26 @@ from collections import deque
 
 D = [0, 1, 0, -1, 0]
 
-def mv_r(dx, dy):
-    nx, ny = rx ,ry
-    while board[ny+dy][nx+dx] == '.':
-        nx += dx;ny += dy
-    
-    if goal == (nx+dx, ny+dy): nx += dx; ny += dy
-    board[ny][nx] = 'X'
-    return nx, ny
-
-def mv_b(dx, dy):
-    nx, ny = bx ,by
-    while board[ny+dy][nx+dx] == '.':
-        nx += dx;ny += dy
-    
-    if goal == (nx+dx, ny+dy): nx += dx; ny += dy
-    board[ny][nx] = 'X'
-    return nx, ny
-
 def mv(dx, dy):
-    f = [mv_r, mv_b]
+    f = [(rx, ry), (bx, by)]
     if (dx == -1 and bx < rx)\
     or (dx == 1 and rx < bx)\
     or (dy == -1 and by < ry)\
     or (dy == 1 and ry < by): f = f[::-1]
-    
-    ret = list(map(lambda x:x(dx, dy), f))
-    if f != [mv_r, mv_b]: ret = ret[::-1]
 
-    for pos in ret: board[pos[1]][pos[0]] = ['.', 'O'][goal == pos]
+    ret = []
+
+    for nx, ny in f:
+        while board[ny+dy][nx+dx] == '.':
+            nx += dx;ny += dy
+        
+        if goal == (nx+dx, ny+dy): nx += dx; ny += dy
+        board[ny][nx] = 'X'
+        ret.append((nx, ny))
+
+    if f != [(rx,ry), (bx,by)]: ret = ret[::-1]
+
+    for x, y in ret: board[y][x] = ['.', 'O'][goal == (x,y)]
 
     return sum(ret, ())
 
