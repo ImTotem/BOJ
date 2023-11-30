@@ -1,19 +1,20 @@
 import sys
 input = lambda:sys.stdin.readline().strip()
 
-from heapq import heappop, heappush
+from collections import deque
 
 def main():
-    n, l = map(int, input().split())
+    _, l = map(int, input().split())
     a = list(map(int, input().split()))
 
     ans = []
-    hq = []
+    dq = deque()
 
-    for i in range(n):
-        while 0 <= i-l and hq and hq[0][1] < i-l+1: heappop(hq)
-        heappush(hq, (a[i], i))
-        ans.append(hq[0][0])
+    for i, v in enumerate(a):
+        while dq and v < dq[-1][1]: dq.pop()
+        dq.append((i, v))
+        while dq[0][0] <= i - l: dq.popleft()
+        ans.append(dq[0][1])
     
     print(*ans)
 
