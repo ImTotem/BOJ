@@ -1,5 +1,4 @@
-import sys
-input = lambda:sys.stdin.readline().strip()
+input = open(0).readline
 
 def main():
     n = int(input())
