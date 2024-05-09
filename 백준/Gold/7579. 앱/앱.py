@@ -5,18 +5,16 @@ def main():
     n, m = map(int, input().split())
     am = list(map(int, input().split()))
     ac = list(map(int, input().split()))
-    w = sum(ac)
+    w = sum(ac) + 1
 
-    dp = [[0] * (w+1) for _ in range(n+1)]
+    dp0, dp1 = [0] * w, [0] * w
+    ans = w
 
-    ans = w + 1
-
-    for i in range(1, n+1):
-        for j in range(w+1):
-            dp[i][j] = dp[i-1][j]
-        for j in range(ac[i-1], w+1):
-            dp[i][j] = max(am[i-1] + dp[i-1][j-ac[i-1]], dp[i][j])
-            if m <= dp[i][j]: ans = min(ans, j)
+    for i in range(n):
+        dp0 = dp1[:]
+        for j in range(ac[i], w):
+            dp1[j] = max(am[i] + dp0[j-ac[i]], dp1[j])
+            if m <= dp1[j]: ans = min(ans, j)
     
     return ans
 
