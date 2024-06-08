@@ -1,32 +1,25 @@
 import sys
 input = lambda:sys.stdin.readline().strip()
 
-from heapq import heappush, heappop
-
 def main():
     n = int(input())
     a = list(map(int, input().split()))
     m = int(input())
     b = list(map(int, input().split()))
     
-    ans = []
-    
-    x, y = ([[] for _ in range(101)] for _ in range(2))
-    for i, v in enumerate(a): heappush(x[v], i)
-    for i, v in enumerate(b): heappush(y[v], i)
-    
-    mx, my = 0, 0
-    for i in range(100, 0, -1):
-        while x[i] and x[i][0] < mx: heappop(x[i])
-        while y[i] and y[i][0] < my: heappop(y[i])
+    a_set, b_set = set(a), set(b)
+    intersec = a_set & b_set
+    lcs = []
+    while intersec:
+        num = max(intersec)
+        lcs.append(num)
+        ai, bi = a.index(num), b.index(num)
+        del a[:ai+1]
+        del b[:bi+1]
+        a_set, b_set = set(a), set(b)
+        intersec = a_set & b_set
 
-        while len(x[i]) and len(y[i]):    
-            mx = heappop(x[i])
-            my = heappop(y[i])
-            
-            ans.append(a[mx])
-
-    print(len(ans))
-    if ans: print(*ans)
+    print(len(lcs))
+    print(*lcs)
 
 main()
