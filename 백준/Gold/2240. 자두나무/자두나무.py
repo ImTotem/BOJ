@@ -17,6 +17,6 @@ def main():
 
         dp[0] = dp[1][:]
 
-    return dp[-1][-1]
+    return dp[1][t]
 
 print(main())
