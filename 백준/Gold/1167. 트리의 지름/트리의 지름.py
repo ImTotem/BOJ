@@ -1,31 +1,38 @@
 import sys
+input = lambda:sys.stdin.readline().strip()
 
-input = lambda: sys.stdin.readline().strip()
+def main():
+    n = int(input())
 
-V = int(input())
+    graph = [[] for _ in range(n+1)]
 
-graph = [[] for _ in range(V+1)]
+    for _ in range(n):
+        a, *b = list(map(int, input().split()))
 
-for _ in range(V):
-    a, *b = list(map(int, input().split()))
+        for i in range(0, len(b)-1, 2):
+            graph[a].append((b[i], b[i+1]))
+    
+    def dfs(start):
+        visited = set()
+        cost = 0
+        end = start
 
-    for i in range(0, len(b)-1, 2):
-        graph[a].append([b[i], b[i+1]])
+        stack = [(start, 0)]
+        while stack:
+            u, ucost = stack.pop()
+            if u not in visited:
+                visited.add(u)
+                if ucost > cost:
+                    cost = ucost
+                    end = u
+                for v, vcost in graph[u]:
+                    if v not in visited:
+                        stack.append((v, ucost + vcost))
+        
+        return end, cost
+    
+    start, _ = dfs(1)
+    return dfs(start)[1]
 
-def dfs(u, wu):
-    for v, wv in graph[u]:
-        if visited[v] == -1:
-            visited[v] = wu + wv
-            dfs(v, visited[v])
-
-visited = [-1] * (V+1)
-visited[1] = 0
-dfs(1, 0)
-
-start = visited.index(max(visited))
-
-visited = [-1] * (V+1)
-visited[start] = 0
-dfs(start, 0)
-
-print(max(visited))
+if __name__ == "__main__": 
+    print(main())
