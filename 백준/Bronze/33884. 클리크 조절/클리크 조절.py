@@ -7,12 +7,15 @@ def main():
     n = int(input())
     first = [tuple(map(int, input().split())) for _ in range(n)]
     second = [tuple(map(int, input().split())) for _ in range(n)]
-    first.sort(); second.sort()
-    x = second[0][0] - first[0][0]
-    first.sort(key=lambda x:x[1]); second.sort(key=lambda x:x[1])
-    y = second[0][1] - first[0][1]
+    x1, y1 = INF, INF
+    for x, y in first:
+        x1, y1 = min(x1, x), min(y1, y)
     
-    return f'{x} {y}'
+    x2, y2 = INF, INF
+    for x, y in second:
+        x2, y2 = min(x2, x), min(y2, y)
+
+    return f'{x2-x1} {y2-y1}'
 
 if __name__ == "__main__":
     print(main())
