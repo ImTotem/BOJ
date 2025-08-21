@@ -16,19 +16,14 @@ def main():
     b = list(acc(b))
 
     da = defaultdict(int)
-    db = defaultdict(int)
-
     for i in range(n):
         for j in range(i+1, n+1):
             da[a[j] - a[i]] += 1
 
+    ans = 0
     for i in range(m):
         for j in range(i+1, m+1):
-            db[b[j] - b[i]] += 1
-    
-    ans = 0
-    for k, v in da.items():
-        ans += db[t - k] * v
+            ans += da[t - (b[j] - b[i])]
 
     return ans
 
