@@ -1,6 +1,5 @@
 import sys
 input = lambda: sys.stdin.readline().strip()
-from bisect import bisect_left
 
 INF = float('inf')
 
@@ -12,11 +11,15 @@ def main():
     a.sort()
     ans = 0
 
-    for i in range(n):
-        j = min(n-1, bisect_left(a, x - a[i]))
+    l, r = 0, n-1
+    while True:
+        while l < r and a[l] + a[r] > x:
+            r -= 1
         
-        if j <= i: break
-        if a[i] + a[j] == x: ans += 1
+        if l == r: break
+
+        ans += a[l] + a[r] == x
+        l += 1
         
     return ans
 
