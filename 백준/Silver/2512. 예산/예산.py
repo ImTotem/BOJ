@@ -1,23 +1,22 @@
 import sys
 input = lambda: sys.stdin.readline().strip()
 
+INF = float('inf')
+
 def main():
     n = int(input())
     budgets = list(map(int, input().split()))
     m = int(input())
 
-    lo, hi = 1, max(budgets)
-    while lo <= hi:
-        mid = (lo + hi) // 2
+    budgets.sort()
 
-        budget = sum(min(i, mid) for i in budgets)
+    ans = -INF
+    summ = 0
+    for i in range(n):
+        ans = max(ans, (m - summ) // (n - i))
+        summ += budgets[i]
 
-        if budget > m:
-            hi = mid - 1
-        else:
-            lo = mid + 1
-    
-    return hi
+    return min(ans, budgets[-1])
     
 if __name__ == "__main__":
     print(main())
