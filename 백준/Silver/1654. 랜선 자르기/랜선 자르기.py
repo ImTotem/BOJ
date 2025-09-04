@@ -1,19 +1,22 @@
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda: sys.stdin.readline().strip()
 
-k, n = map(int, input().split())
-l = [int(input()) for _ in range(k)]
+def main():
+    k, n = map(int, input().split())
+    lans = [int(input()) for _ in range(k)]
 
-start, end = 1, max(l)
+    lo, hi = 1, max(lans)
+    while lo <= hi:
+        mid = (lo + hi) // 2
 
-while start <= end:
-    mid = (start + end) // 2
+        amount = sum(lan // mid for lan in lans)
 
-    cnt = sum(i//mid for i in l)
+        if amount < n:
+            hi = mid - 1
+        else:
+            lo = mid + 1
     
-    if cnt < n:
-        end = mid - 1
-    else:
-        start = mid + 1
-
-print(end)
+    return hi
+    
+if __name__ == "__main__":
+    print(main())
