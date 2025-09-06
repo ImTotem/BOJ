@@ -1,37 +1,36 @@
-from collections import deque
 import sys
-
 input = lambda: sys.stdin.readline().strip()
+from collections import deque
 
-N, M = map(int, input().split())
-graph = [list(map(int, list(input()))) for _ in range(N)]
+INF = float('inf')
+d = [1, 0, -1, 0, 1]
 
-def bfs():
-    dx = [1, -1, 0, 0]
-    dy = [0, 0, 1, -1]
+def main():
+    n, m = map(int, input().split())
+    world = [list(map(int, list(input()))) for _ in range(n)]
 
-    visited = [[[False] * 2 for _ in range(M)] for _ in range(N)]
-    q = deque()
-    q.append([0, 0, False, 1])
+    visited = [[[False] * 2 for _ in range(m)] for _ in range(n)]
     visited[0][0][0] = True
+    
+    q = deque([(0, 0, 1, 0)])
 
     while q:
-        x, y, used, an = q.popleft()
+        x, y, dist, flag = q.popleft()
 
-        if [x, y] == [M-1, N-1]:
-            return an
+        if (x, y) == (m-1, n-1):
+            return dist
 
         for i in range(4):
-            nx, ny = x + dx[i], y + dy[i]
+            nx, ny = x + d[i], y + d[i+1]
 
-            if 0 <= nx < M and 0 <= ny < N and not visited[ny][nx][used]:
-                if graph[ny][nx] == 0:
-                    q.append([nx, ny, used, an+1])
-                    visited[ny][nx][used] = True
-                elif not used:
-                    q.append([nx, ny, True, an+1])
-                    visited[ny][nx][True] = True
-    
+            if 0 <= nx < m and 0 <= ny < n and not visited[ny][nx][flag]:
+                if flag and world[ny][nx]: continue
+                nflag = flag or world[ny][nx]
+                q.append((nx, ny, dist + 1, nflag))
+                visited[ny][nx][nflag] = True
+
     return -1
-
-print(bfs())
+    
+    
+if __name__ == "__main__":
+    print(main())
