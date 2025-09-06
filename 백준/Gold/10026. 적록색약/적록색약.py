@@ -1,48 +1,43 @@
-from heapq import *
+import sys
+input = lambda: sys.stdin.readline().strip()
 from collections import deque
-from sys import stdin
-input = stdin.readline
 
-N = int(input())
-img = []
-img2 = []
+INF = float('inf')
+d = [1, 0, -1, 0, 1]
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+def main():
+    n = int(input())
+    imgs1 = [input() for _ in range(n)]
+    imgs2 = [list(i.replace('R', 'G')) for i in imgs1]
+    imgs1 = list(map(list, imgs1))
 
-for _ in range(N):
-    line = input().strip()
-    img.append(list(line))
-    img2.append(list(line.replace('G', 'R')))
-
-graph = [[0 for _ in range(N)] for _ in range(N)]
-graph2 = [[0 for _ in range(N)] for _ in range(N)]
-
-def bfs(start, curImg, g):
-    color = curImg[start[1]][start[0]]
-
-    if g[start[1]][start[0]] == 0:
-        q = deque()
-        q.append(start)
+    def bfs(a, b, graph):
+        if graph[b][a] == 0: return 0
+        target = graph[b][a]
+        q = deque([(a, b)])
 
         while q:
             x, y = q.popleft()
 
+            graph[y][x] = 0
+            
             for i in range(4):
-                nx, ny = x + dx[i], y + dy[i]
+                nx, ny = x + d[i], y + d[i+1]
+                
+                if 0 <= nx < n and 0 <= ny < n and graph[ny][nx] != 0 and graph[ny][nx] == target:
+                    graph[ny][nx] = 0
+                    q.append((nx, ny))
 
-                if 0 <= nx < N and 0 <= ny < N and curImg[ny][nx] == color and g[ny][nx] == 0:
-                    q.append([nx, ny])
-                    g[ny][nx] = 1
-        
         return 1
-    
-    return 0
-    
-a, b = 0, 0
-for i in range(N):
-    for j in range(N):
-        a += bfs([j, i], img, graph)
-        b += bfs([j, i], img2, graph2)
 
-print(a, b)
+    normal, color_blind = 0, 0
+
+    for a in range(n):
+        for b in range(n):
+            normal += bfs(a, b, imgs1)
+            color_blind += bfs(a, b, imgs2)
+
+    return f'{normal} {color_blind}'
+    
+if __name__ == "__main__":
+    print(main())
