@@ -1,30 +1,22 @@
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda: sys.stdin.readline().strip()
 
-N = int(input())
-M = int(input())
-broken = set(map(int, input().split())) if 0 < M else set()
+INF = float('inf')
 
-if N != 100:
-    if M < 10:
-        ansa, ansb = 0, 0
-        a, b = N, N
-        while True:
-            if 0 <= a and set(map(int, list(str(a)))) & broken:
-                a -= 1
-                ansa += 1
-            else:
-                if a != -1:
-                    print(min(abs(N-100), len(str(a)) + ansa))
-                    break
-                
-            if set(map(int, list(str(b)))) & broken:
-                b += 1
-                ansb += 1
-            else:
-                print(min(abs(N-100), len(str(b)) + ansb))
-                break
-    else:
-        print(abs(100-N))
-else:
-    print(0)
+def main():
+    n = int(input())
+    m = int(input())
+    a = set(input().split()) if m else set()
+
+    if n == 100: return 0
+
+    channel = INF
+    for i in range(1000001):
+        if not (set(list(str(i))) & a):
+            channel = min(channel, i, key=lambda x:abs(n - x))
+
+    return min(len(str(channel)) + abs(n - channel), abs(n - 100))
+
+    
+if __name__ == "__main__":
+    print(main())
