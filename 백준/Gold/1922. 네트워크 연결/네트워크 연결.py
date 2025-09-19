@@ -1,5 +1,6 @@
 import sys
 input = lambda: sys.stdin.readline().strip()
+from heapq import heapify, heappop, heappush
 
 INF = float('inf')
 
@@ -8,28 +9,28 @@ def main():
     m = int(input())
     
     ans = 0
-    edges = [tuple(map(int, input().split())) for _ in range(m)]
-    edges.sort(key=lambda x:x[2])
+    edges = [[] for _ in range(n + 1)]
+    for _ in range(m):
+        a, b, c = map(int, input().split())
+        edges[a].append((c, b))
+        edges[b].append((c, a))
 
-    parent = list(range(n + 1))
+    sib = []
+    visited = 0b11
+    pq = edges[1]; heapify(pq)
+    while pq:
+        c, b = heappop(pq)
 
-    def union(a, b):
-        a, b = find(a), find(b)
-        if a != b: parent[a] = b
+        if visited & (1 << b): continue
+        sib.append(c)
+
+        visited |= (1 << b)
+        ans += c
     
-    def find(x):
-        if x == parent[x]: return x
-        parent[x] = find(parent[x])
-        return parent[x]
+        for e in edges[b]:
+            if visited & (1 << e[1]): continue
+            heappush(pq, e)
 
-    for a, b, c in edges:
-        if len(set(parent)) == 2: break
-        if find(a) == find(b): continue
-
-        union(a, b)
-
-        ans += c    
-        
     return ans
 
 if __name__ == "__main__":
