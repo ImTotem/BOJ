@@ -1,18 +1,20 @@
-from bisect import bisect_left
 import sys
-
 input = lambda: sys.stdin.readline().strip()
+from bisect import bisect_left
 
-n = int(input())
-a = list(map(int, input().split()))
+INF = float('inf')
 
-dp = [a[0]]
+def main():
+    n = int(input())
+    a = list(map(int, input().split()))
+    dp = [a[0]]
+    for i in range(1, n):
+        if dp[-1] < a[i]:
+            dp.append(a[i])
+        else:
+            dp[bisect_left(dp, a[i])] = a[i]
+    
+    return len(dp)
 
-for i in range(n):
-    if a[i] > dp[-1]:
-        dp.append(a[i])
-    else:
-        idx = bisect_left(dp, a[i])
-        dp[idx] = a[i]
-
-print(len(dp))
+if __name__ == "__main__":
+    print(main())
