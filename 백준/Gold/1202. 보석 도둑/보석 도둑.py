@@ -1,22 +1,25 @@
 import sys
-input = lambda:sys.stdin.readline().strip()
+input = lambda: sys.stdin.readline().strip()
+from heapq import heapify, heappop, heappush
 
-from heapq import heappop, heappush
+INF = float('inf')
 
 def main():
     n, k = map(int, input().split())
-    gem = [list(map(int, input().split())) for _ in range(n)]
+    jewels = [tuple(map(int, input().split())) for _ in range(n)]
     bags = [int(input()) for _ in range(k)]
-    gem.sort();bags.sort()
-
+    jewels.sort(); bags.sort()
+    
     ans = 0
-    tmp = []
+    pq = []
     for bag in bags:
-        while gem and gem[0][0] <= bag:
-            heappush(tmp, -heappop(gem)[1])
+        while jewels and jewels[0][0] <= bag:
+            heappush(pq, -heappop(jewels)[1])
         
-        if tmp: ans -= heappop(tmp)
+        if pq: ans -= heappop(pq)
 
-    print(ans)
+    return ans
 
-main()
+
+if __name__ == "__main__":
+    print(main())
