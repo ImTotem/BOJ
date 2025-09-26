@@ -15,7 +15,7 @@ def main():
         flag = True
         for b in ps:
             if a & b:
-                a.update(b)
+                a |= b
                 ps.remove(b)
                 m -= 1
                 flag = False
