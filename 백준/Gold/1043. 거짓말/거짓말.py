@@ -1,29 +1,28 @@
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda: sys.stdin.readline().strip()
 
-N, M = map(int, input().split())
-in_ = list(map(int, input().split()))
+INF = float('inf')
 
-know_true_length = in_[0]
-know_true = in_[1:] if know_true_length > 0 else []
-parties = [set(list(map(int, input().split()))[1:]) for _ in range(M)]
+def main():
+    n, m = map(int, input().split())
+    r, *a = map(int, input().split())
+    a = set(a)
+    ps = [set(list(map(int, input().split()))[1:]) for _ in range(m)]
 
-# 과장된 이야기를 할 수 있는 파티의 수
-if know_true_length == 0:
-    print(M)
-else:
-    a = set(know_true)
-    while True:
+    if not r: return m
+
+    while ps:
         flag = True
-
-        for b in parties:
-            c = a & b
-            if c:
+        for b in ps:
+            if a & b:
                 a.update(b)
-                parties.remove(b)
-                M -= 1
+                ps.remove(b)
+                m -= 1
                 flag = False
+        
+        if flag: return m
+    
+    return m
 
-        if flag:
-            print(M)
-            break
+if __name__ == "__main__":
+    print(main())
