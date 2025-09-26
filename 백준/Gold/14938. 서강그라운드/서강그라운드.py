@@ -1,27 +1,31 @@
 import sys
-input = lambda:sys.stdin.readline().strip()
+input = lambda: sys.stdin.readline().strip()
 
-n, m, r = map(int, input().split())
+INF = float('inf')
 
-t = list(map(int, input().split()))
+def main():
+    n, m, r = map(int, input().split())
+    t = list(map(int, input().split()))
+    
+    graph = [[INF] * n for _ in range(n)]
+    for i in range(n): graph[i][i] = 0
 
-graph = [[[0, float("inf")][i!=j] for i in range(n)] for j in range(n)]
-
-for _ in range(r):
-    a, b, l = map(int, input().split())
-    a, b = (a-1, b-1)
-
-    graph[a][b] = l
-    graph[b][a] = l
-
-for k in range(n):
+    for _ in range(r):
+        a, b, l = map(int, input().split())
+        graph[a - 1][b - 1] = l
+        graph[b - 1][a - 1] = l
+    
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
+    
+    ans = 0
     for i in range(n):
-        for j in range(n):
-            graph[i][j] = min(graph[i][j], graph[i][k]+graph[k][j])
+        ans = max(ans, sum(t[j] for j in range(n) if graph[i][j] <= m))
 
-ans = 0
-for i in range(n):
-    tmp = sum( t[j] if graph[i][j] <= m else 0 for j in range(n) )
-    ans = max(ans, tmp)
+    return ans
+        
 
-print(ans)
+if __name__ == "__main__":
+    print(main())
