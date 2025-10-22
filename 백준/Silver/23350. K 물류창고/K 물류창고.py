@@ -8,7 +8,6 @@ INF = float('inf')
 def main():
     n, m = map(int, input().split())
     cont = deque(tuple(map(int, input().split())) for _ in range(n))
-    # (우선순위 p, 무게 w)
 
     order = sorted(map(lambda x:x[0], cont))
 
@@ -21,14 +20,14 @@ def main():
             cont.rotate(-1)
         
         p, w = cont.popleft()
-        order.pop()
 
-        if stack and stack[-1][0] != p:
+        if m != order.pop():
             stack = []
+            m = p
         
-        idx = bisect_left(stack, w, key=lambda x:x[1])
-        ans += w + 2 * sum(map(lambda x:x[1], stack[:idx]))
-        stack.insert(idx, (p, w))
+        idx = bisect_left(stack, w)
+        ans += w + 2 * sum(stack[:idx])
+        stack.insert(idx, w)
 
     return ans
 
