@@ -1,6 +1,7 @@
 import sys
 input = lambda: sys.stdin.readline().strip()
 from collections import deque
+from bisect import bisect_left
 
 INF = float('inf')
 
@@ -13,7 +14,6 @@ def main():
 
     ans = 0
 
-    space = []
     stack = []
     while cont:
         while cont[0][0] != order[-1]:
@@ -26,16 +26,9 @@ def main():
         if stack and stack[-1][0] != p:
             stack = []
         
-        while stack and stack[-1][1] < w:
-            ans += stack[-1][1]
-            space.append(stack.pop())
-
-        stack.append((p, w))
-        ans += w
-
-        while space:
-            ans += space[-1][1]
-            stack.append(space.pop())
+        idx = bisect_left(stack, w, key=lambda x:x[1])
+        ans += w + 2 * sum(map(lambda x:x[1], stack[:idx]))
+        stack.insert(idx, (p, w))
 
     return ans
 
