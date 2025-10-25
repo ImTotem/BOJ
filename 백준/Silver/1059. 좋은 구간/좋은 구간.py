@@ -4,20 +4,17 @@ input = lambda: sys.stdin.readline().strip()
 INF = float('inf')
 
 def main():
-    l = map(int, input().split())
-    s = set(map(int, input().split()))
+    l = int(input())
+    s = [0] + sorted(map(int, input().split()))
     n = int(input())
 
-    ans = 0
+    for i in range(l):
+        if n <= s[i] or s[i+1] <= n: continue
+        
+        a, b = s[i] + 1, s[i+1] - 1
+        return (n - a + 1) * (b - n + 1) - 1
 
-    for a in range(1, 1000):
-        for b in range(a + 1, 1001):
-            if n < a or b < n: continue
-            if s & set(range(a, b + 1)): continue
-
-            ans += 1
-
-    return ans
+    return 0
 
 if __name__ == "__main__":
     print(main())
