@@ -6,8 +6,6 @@ INF = float('inf')
 def main():
     ax, ay, bx, by, cx, cy = map(int, input().split())
     a, b, c = (ax, ay), (bx, by), (cx, cy)
-
-    if ax == bx == cx: return -1
     
     if (by - ay) * (cx - bx) == (cy - by) * (bx - ax) : return -1
 
