@@ -1,18 +1,25 @@
+import sys
+input = lambda: sys.stdin.readline().strip()
+
 from collections import deque
-from sys import stdin
-input = stdin.readline
 
-N = int(input())
-n = deque(list(map(int, input().split())))
-idx = deque([i+1 for i in range(N)])
+INF = float('inf')
 
-ans = []
+def main():
+    n = int(input())
+    q = deque(map(int, input().split()))
+    i = deque(map(str, range(1, n + 1)))
+    
+    ans = []
+    for _ in range(n):
+        ans.append(str(i.popleft()))
+        
+        r = (q[0] > 0) - q.popleft()
 
-for i in range(N):
-    rot = [0, 1][n[0] > 0] + -1*(n.popleft())
-    ans.append(idx.popleft())
+        q.rotate(r)
+        i.rotate(r)
 
-    n.rotate(rot)
-    idx.rotate(rot)
+    return ' '.join(ans)
 
-print(*ans)
+if __name__ == "__main__":
+    print(main())
