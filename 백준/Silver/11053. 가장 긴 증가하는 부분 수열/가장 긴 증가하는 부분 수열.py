@@ -1,30 +1,22 @@
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+from bisect import bisect_left
 
-n = int(input())
-a = list(map(int, input().split()))
+INF = float('inf')
 
-lis = [a[0]]
-right = 1
+def main():
+    n = int(input())
+    a = list(map(int, input().split()))
 
-def search(right, target):
-    left = 0
-    while left < right:
-        mid = ( left + right ) // 2
-
-        if lis[mid] < target:
-            left = mid + 1
-        else:
-            right = mid
+    dp = []
     
-    return right
+    for i in a:
+        if not dp or i > dp[-1]:
+            dp.append(i)
+        else:
+            dp[bisect_left(dp, i)] = i
+            
+    return len(dp)
 
-for i in range(1, n):
-    if lis[-1] < a[i]:
-        lis.append(a[i])
-        right += 1
-    else:
-        idx = search(right, a[i])
-        lis[idx] = a[i]
-
-print(right)
+if __name__ == "__main__":
+    print(main())
