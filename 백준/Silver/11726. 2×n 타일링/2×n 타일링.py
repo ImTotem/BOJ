@@ -1,15 +1,18 @@
-from sys import stdin
-input = stdin.readline
-from math import factorial as f
+import sys
+input = lambda: sys.stdin.readline().rstrip()
 
-n = int(input())
+INF = float('inf')
 
-ans = 0
+def main():
+    n = int(input())
+    MOD = 10007
+    if n <= 2: return n
 
-for i in range(0, n+1, 2):
-    a = n - i
-    b = i // 2
+    a, b = 1, 2
+    for _ in range(3, n + 1):
+        a, b = b, (a + b) % MOD
+    
+    return b % MOD
 
-    ans+=f(a+b)//(f(a)*f(b))
-
-print(ans%10007)
+if __name__ == "__main__":
+    print(main())
