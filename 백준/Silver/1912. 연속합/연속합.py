@@ -1,15 +1,18 @@
 import sys
+input = lambda: sys.stdin.readline().rstrip()
 
-input = lambda: sys.stdin.readline().strip()
+INF = float('inf')
 
-n = int(input())
-s = list(map(int, input().split()))
+def main():
+    n = int(input())
+    dp = list(map(int, input().split()))
 
-cur = 0
-ans = float("-inf")
+    ans = dp[0]
+    for i in range(1, n):
+        dp[i] = max(dp[i], dp[i] + dp[i-1])
+        ans = max(ans, dp[i])
+    
+    return ans
 
-for i in s:
-    cur = max(cur + i, i)
-    ans = max(ans, cur)
-
-print(ans)
+if __name__ == "__main__":
+    print(main())
