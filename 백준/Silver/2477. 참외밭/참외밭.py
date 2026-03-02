@@ -1,29 +1,28 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
 from collections import deque
-from sys import stdin
-input = stdin.readline
 
-k = int(input())
+INF = float('inf')
 
-vec = deque()
-dis = deque()
-for i in range(6):
-    data = list(map(int, input().split()))
-    vec.append(data[0])
-    dis.append(data[1])
+def main():
+    k = int(input())
+    v = []
 
-w1 = [vec.count(1), vec.count(2)].index(1)+1
-h1 = [vec.count(3), vec.count(4)].index(1)+3
+    for _ in range(6):
+        _, b = map(int, input().split())
+        v.append(b)
+    
+    w = max(v)
+    a = v.index(w)
 
-idx1 = vec.index(w1)
-idx2 = vec.index(h1)
+    x, y = a - 1, (a + 1) % 6
 
-while max(idx1, idx2) != 1:
-    vec.rotate(1)
-    dis.rotate(1)
+    mm = v[a] * v[y] - v[a - 2] * v[(y + 2) % 6]
 
-    idx1 = vec.index(w1)
-    idx2 = vec.index(h1)
+    if v[x] > v[y]:
+        mm = v[a] * v[x] - v[(a + 2) % 6] * v[x - 2]
 
-s = dis[vec.index(w1)]*dis[vec.index(h1)]
+    return mm * k
 
-print((s-dis[3]*dis[-2])*k)
+if __name__ == "__main__":
+    print(main())
