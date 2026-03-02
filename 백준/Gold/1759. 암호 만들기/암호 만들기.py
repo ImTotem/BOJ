@@ -1,30 +1,38 @@
 import sys
-input = lambda:sys.stdin.readline().strip()
+input = lambda: sys.stdin.readline().rstrip()
+from heapq import heappop, heappush
 
-AEIOU = set("aeiou")
+INF = float('inf')
 
 def main():
     l, c = map(int, input().split())
-    chars = sorted(input().split())
+    chars = list(input().split())
+    chars.sort()
+
+    aeiou = set('aeiou')
+    consonant = set(chars) - aeiou
     
     ans = []
-    
+
     stack = []
     def dfs(nxt):
         s = set(stack)
 
         if len(stack) == l:
-            if 2 <= len(s - AEIOU) and 1 <= len(s & AEIOU):
+            if len(s & consonant) >= 2 and len(s & aeiou) >= 1:
                 ans.append(''.join(stack))
             return
-
+        
         for i in range(nxt, c):
             stack.append(chars[i])
-            dfs(i+1)
+            dfs(i + 1)
             stack.pop()
-
+    
     dfs(0)
 
     return '\n'.join(ans)
 
-print(main())
+    return
+    
+if __name__ == "__main__":
+    print(main())
