@@ -31,8 +31,6 @@ def main():
     dfs(0)
 
     return '\n'.join(ans)
-
-    return
     
 if __name__ == "__main__":
     print(main())
