@@ -1,39 +1,35 @@
-from heapq import *
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+from heapq import heappop, heappush
 
-INF = float("inf")
+INF = float('inf')
 
-N = int(input())
-M = int(input())
+def main():
+    n, m = int(input()), int(input())
+    graph = [[] for _ in range(n + 1)]
 
-info = [[] for _ in range(N+1)]
-
-for _ in range(M):
-    u, v, cost = map(int, input().split())
-    info[u].append([cost, v])
-
-start, end = map(int, input().split())
-
-def dijkstra(graph, start, end):
-    pq = []
-    visited = [INF] * (N+1)
-    heappush(pq, (0, start))
-    visited[start] = 0
-
-    while pq:
-        cur_cost, cur_node = heappop(pq)
-
-        if visited[cur_node] < cur_cost:
-            continue
-
-        for next_cost, next_node in graph[cur_node]:
-            next_sum_cost = cur_cost + next_cost
-
-            if visited[next_node] > next_sum_cost:
-                heappush(pq, [next_sum_cost, next_node])
-                visited[next_node] = next_sum_cost
-
-    return visited[end]
+    for _ in range(m):
+        a, b, c = map(int, input().split())
+        graph[a].append((c, b))
     
-print(dijkstra(info, start, end))
+    a, b = map(int, input().split())
+
+    visited = [INF] * (n + 1)
+    visited[a] = 0
+    pq = [(0, a)]
+    while pq:
+        uc, u = heappop(pq)
+        
+        if visited[u] < uc: continue
+
+        for vc, v in graph[u]:
+            uvc = uc + vc
+
+            if visited[v] > uvc:
+                heappush(pq, (uvc, v))
+                visited[v] = uvc
+
+    return visited[b]
+
+if __name__ == "__main__":
+    print(main())
