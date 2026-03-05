@@ -1,39 +1,45 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+from heapq import heappop, heappush
 from collections import deque
-from sys import stdin
-input = stdin.readline
 
-for _ in range(int(input())):
-    N, K = map(int, input().split())
+INF = float('inf')
+D = [0, 1, 0, -1, 0]
 
-    D = [0]+list(map(int, input().split()))
-
-    indegree = [0] * (N+1)
-    graph = [[] for _ in range(N+1)]
-
-    for _ in range(K):
+def main():
+    n, k = map(int, input().split())
+    d = [0] + list(map(int, input().split()))
+    graph = [[] for _ in range(n + 1)]
+    deg = [0] * (n + 1)
+    
+    for _ in range(k):
         x, y = map(int, input().split())
         graph[x].append(y)
-        indegree[y] += 1
+        deg[y] += 1
 
-    W = int(input())
-
+    w = int(input())
+    
     q = deque()
-    dp = [0] * (N+1)
+    dp = [0] * (n + 1)
 
-    for i in range(1, N+1):
-        if indegree[i] == 0:
-            q.append(i)
-            dp[i] = D[i]
-
+    for i in range(1, n + 1):
+        if deg[i] != 0: continue
+        q.append(i)
+        dp[i] = d[i]
+    
     while q:
-        cur = q.popleft()
+        x = q.popleft()
 
-        for i in graph[cur]:
-            indegree[i] -= 1
+        for y in graph[x]:
+            deg[y] -= 1
 
-            dp[i] = max(dp[i], D[i] + dp[cur])
+            dp[y] = max(dp[y], dp[x] + d[y])
 
-            if indegree[i] == 0:
-                q.append(i)
+            if deg[y] == 0:
+                q.append(y)
 
-    print(dp[W])
+    return dp[w]
+
+if __name__ == "__main__":
+    for _ in range(int(input())):
+        print(main())
