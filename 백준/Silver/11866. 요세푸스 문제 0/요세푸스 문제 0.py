@@ -1,18 +1,21 @@
-from collections import deque
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+from collections import defaultdict, deque
 
-n, k = map(int, input().split())
+INF = float('inf')
+D = [0, 1, 0, -1, 0]
 
-queue = deque(list(range(1, n+1)))
+def main():
+    n, k = map(int, input().split())
+    dq = deque(range(1, n + 1))
 
-result = []
+    ans = []
 
-for i in range(n-1):
-    for j in range(k-1):
-        queue.append(queue.popleft())
-    result.append(str(queue.popleft()))
+    while dq:
+        dq.rotate(-k + 1)
+        ans.append(str(dq.popleft()))
 
-result.append(str(queue.popleft()))
+    return f'<{", ".join(ans)}>'
 
-print(f"<{', '.join(result)}>")
+if __name__ == "__main__":
+    print(main())
