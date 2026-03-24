@@ -1,32 +1,25 @@
 import sys
 input = lambda: sys.stdin.readline().rstrip()
-from collections import deque
-from itertools import permutations as perm
-from heapq import heappop, heappush
 
 INF = float('inf')
-D = [0, 1, 0, -1, 0]
 
 def main():
     h, w = map(int, input().split())
-
-    ans = [[] for _ in range(h)]
-
-    for y in range(h):
-        c = input()
-        
-        idx = -1
-        for x in range(w):
-            if c[x] == 'c':
-                idx = x
-            
-            if idx == -1:
-                ans[y].append('-1')
-            else:
-                ans[y].append(str(x - idx))
+    ans = []
     
-    return '\n'.join(' '.join(i) for i in ans)
-
+    for _ in range(h):
+        _ans = []
+        line = input()
+        
+        cloud = -1
+        for i in range(w):
+            if line[i] == 'c':
+                cloud = i
+            _ans.append([f'{i - cloud}', '-1'][cloud == -1])
+    
+        ans.append(' '.join(_ans))
+    
+    return '\n'.join(ans)
 
 if __name__ == "__main__":
     print(main())
