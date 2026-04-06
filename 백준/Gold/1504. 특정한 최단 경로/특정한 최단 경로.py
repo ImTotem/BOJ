@@ -1,43 +1,50 @@
-from heapq import heappop as pop, heappush as push
-INF = float("inf")
-from sys import stdin
-input = stdin.readline
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+from collections import defaultdict
+from heapq import heappop, heappush
 
-N, E = map(int, input().split())
+INF = float('inf')
+D = [0, 1, 0, -1, 0]
 
-graph = [[] for _ in range(N+1)]
+def main():
+    n, e = map(int, input().split())
+    graph = defaultdict(set)
 
-for i in range(E):
-    a, b, c = map(int, input().split())
-    graph[a].append([c, b])
-    graph[b].append([c, a])
+    for _ in range(e):
+        a, b, c = map(int, input().split())
+        graph[a].add((c, b))
+        graph[b].add((c, a))
+    
+    v1, v2 = map(int, input().split())
+    
+    def dij(s):
+        pq = [(0, s)]
+        visited = [INF] * (n + 1)
+        visited[s] = 0
 
-v1, v2 = map(int, input().split())
+        while pq:
+            uc, u = heappop(pq)
 
-def dijkstra(start, end):
-    pq = []
-    visited = [INF] * (N+1)
-    push(pq, (0, start))
-    visited[start] = 0
+            if uc > visited[u]: continue
 
-    while pq:
-        cur_cost, cur_node = pop(pq)
+            for vc, v in graph[u]:
+                c = uc + vc
 
-        if visited[cur_node] < cur_cost:
-            continue
+                if visited[v] > c:
+                    heappush(pq, (c, v))
+                    visited[v] = c
+        
+        return visited
 
-        for next_cost, next_node in graph[cur_node]:
-            next_sum_cost = cur_cost + next_cost
-
-            if visited[next_node] > next_sum_cost:
-                push(pq, [next_sum_cost, next_node])
-                visited[next_node] = next_sum_cost
-
-    return visited[end]
-
-ans = min(
-    dijkstra(1, v2) + dijkstra(v2, v1) + dijkstra(v1, N), 
-    dijkstra(1, v1) + dijkstra(v1, v2) + dijkstra(v2, N)
+    w1, w2 = dij(v1), dij(v2)
+    
+    ans = min(
+        w1[1] + w1[v2] + w2[n],
+        w2[1] + w2[v1] + w1[n]
     )
 
-print(ans if ans != INF else -1)
+    return ans if ans != INF else -1
+    
+
+if __name__ == "__main__":
+    print(main())
