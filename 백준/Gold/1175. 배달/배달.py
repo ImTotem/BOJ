@@ -23,7 +23,7 @@ def main():
                 idx += 1
     
     q = deque([(*s, -1, 0, 0)])
-    visited = [[[[0] * 4 for _ in range(4)] for _ in range(m)] for _ in range(n)]
+    visited = [[0] * m for _ in range(n)]
 
     while q:
         x, y, d, c, t = q.popleft()
@@ -42,9 +42,11 @@ def main():
                 nc |= 0b01
             elif graph[ny][nx] == 'D':
                 nc |= 0b10
+
+            b = 1 << ((i << 2) | nc)
             
-            if not visited[ny][nx][i][nc]:
-                visited[ny][nx][i][nc] = 1
+            if not visited[ny][nx] & b:
+                visited[ny][nx] |= b
                 q.append((nx, ny, i, nc, t + 1))
     
     return -1
